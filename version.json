@@ -1,0 +1,8 @@
+{
+  "version": "3.3.0",
+  "manifestVersion": "3.3.0",
+  "minCEPVersion": "11.0",
+  "downloadUrl": "https://github.com/mhdmuzakkir/ornamentReplacer/archive/refs/heads/main.zip",
+  "releaseNotes": "https://github.com/mhdmuzakkir/ornamentReplacer/releases",
+  "checkUrl": "https://raw.githubusercontent.com/mhdmuzakkir/ornamentReplacer/main/version.json"
+}

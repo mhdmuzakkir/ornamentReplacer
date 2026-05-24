@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ornament Replacer</title>
+    <link rel="stylesheet" href="./lib/styles.css">
+</head>
+
+<body>
+    <!-- ===== HOME TAB ===== -->
+    <div id="homeTab" class="tab-content active">
+        <div class="scrollable-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Ornament Replacer</h1>
+                <span class="version">v3.0</span>
+            </div>
+
+            <!-- Processing Mode Section -->
+            <div class="section">
+                <h2>Mode</h2>
+                <div class="mode-selector">
+                    <label class="radio-label">
+                        <input type="radio" name="mode" value="single" checked>
+                        <span class="radio-text">Single File</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="mode" value="batch">
+                        <span class="radio-text">Batch</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Riwayah Selection -->
+            <div class="section" id="riwayahSection" style="display:none;">
+                <div class="section-header">
+                    <h2>Riwayah</h2>
+                    <button id="refreshRiwayahsBtn" class="icon-btn" title="Refresh Riwayahs">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <select id="riwayahSelect" class="riwayah-dropdown">
+                        <option value="">All Riwayahs</option>
+                    </select>
+                </div>
+                <p style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">
+                    Select a riwayah to scope batch processing, or leave as "All Riwayahs".
+                </p>
+
+                <!-- Filter Grid -->
+                <div id="filterGrid" style="display:none; margin-top: 12px;">
+                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 8px;">Filter by:</p>
+                    <div class="filter-grid">
+                        <div class="filter-card" id="juzFilterCard" onclick="openJuzFilterModal()">
+                            <span class="filter-label">Juz</span>
+                            <span class="filter-count" id="juzFilterCount"></span>
+                        </div>
+                        <div class="filter-card" id="surahFilterCard" onclick="openSurahFilterModal()">
+                            <span class="filter-label">Surah</span>
+                            <span class="filter-count" id="surahFilterCount"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options Section -->
+            <div class="section">
+                <h2>Options</h2>
+                <div class="options-list">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="silentMode" checked>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">Silent Mode (No alerts)</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="fitArtboard" checked>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">Fit Artboard (Ctrl+0)</span>
+                    </label>
+                </div>
+
+                <div class="save-options" style="margin-top: 15px; border-top: 1px solid #444; padding-top: 15px;">
+                    <h3 style="font-size: 12px; margin-bottom: 10px; color: #aaa;">Save Mode</h3>
+
+                    <div class="mode-selector grid-2x2" style="margin-bottom: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px;">
+                        <label class="radio-label" style="font-size: 11px; margin: 0;">
+                            <input type="radio" name="saveMode" value="overwrite" checked>
+                            <span class="radio-text">Overwrite</span>
+                        </label>
+                        <label class="radio-label" style="font-size: 11px; margin: 0;">
+                            <input type="radio" name="saveMode" value="dontSave">
+                            <span class="radio-text">Don't Save</span>
+                        </label>
+                        <label class="radio-label" style="font-size: 11px; margin: 0;">
+                            <input type="radio" name="saveMode" value="newFile">
+                            <span class="radio-text">Save As</span>
+                        </label>
+                        <label class="radio-label" style="font-size: 11px; margin: 0;">
+                            <input type="radio" name="saveMode" value="sameAsTemplate">
+                            <span class="radio-text">As Template</span>
+                        </label>
+                    </div>
+
+                    <div id="newFileOptions" style="display: none; background: #2a2a2a; padding: 10px; border-radius: 4px;">
+                        <button id="browseOutputBtn" class="btn btn-secondary" style="width: 100%; margin-bottom: 10px; font-size: 11px; padding: 6px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Browse Output Folder
+                        </button>
+                        <div id="outputPath" style="font-size: 10px; color: #666; margin-bottom: 10px; word-break: break-all;">No folder selected</div>
+
+                        <div id="customFileOptions">
+                            <div style="margin-bottom: 8px;">
+                                <label style="font-size: 10px; color: #999; display: block; margin-bottom: 2px;">Name Separator (e.g., _ or -)</label>
+                                <input type="text" id="nameSeparator" value="_" style="width: 100%; background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 4px; font-size: 11px; border-radius: 3px;">
+                            </div>
+
+                            <div>
+                                <label style="font-size: 10px; color: #999; display: block; margin-bottom: 2px;">New Suffix (e.g., Final, Fixed)</label>
+                                <input type="text" id="nameSuffix" value="Fixed" style="width: 100%; background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 4px; font-size: 11px; border-radius: 3px;">
+                            </div>
+                        </div>
+
+                        <div id="sameAsTemplatePreview" style="display: none; margin-top: 8px; padding: 8px; background: #1a1a1a; border-radius: 3px; border: 1px dashed #555;">
+                            <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Will use suffix:</div>
+                            <div id="templateSuffixDisplay" style="font-size: 12px; color: #4a9eff; font-weight: 600;">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions to Run Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Actions to run</h2>
+                </div>
+
+                <!-- Top-level action checkboxes -->
+                <div class="action-types" style="margin-bottom: 4px;">
+                    <label class="action-checkbox">
+                        <input type="checkbox" id="ayahAlignAction" checked>
+                        <span class="action-box ayah-align">
+                            <span class="action-icon">⚡</span>
+                            <span class="action-name">Ayah Align</span>
+                        </span>
+                    </label>
+                    <label class="action-checkbox">
+                        <input type="checkbox" id="ornamentReplacementAction">
+                        <span class="action-box ornament-replace">
+                            <span class="action-icon">✦</span>
+                            <span class="action-name">Ornament Replacement</span>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Batch Controls -->
+                <div id="batchControls" style="display:none; margin-top: 12px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button id="cancelBatchBtn" class="btn btn-secondary" style="flex: 1; font-size: 11px; padding: 6px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            Cancel Batch
+                        </button>
+                        <button id="exportLogBtn" class="btn btn-secondary" style="flex: 1; font-size: 11px; padding: 6px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Export Log
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Replacement Mode (shown only when ornament replacement is checked) -->
+                <div id="replacementModeSection" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #444;">
+                    <div class="mode-selector" style="margin-bottom: 12px; display: flex; gap: 8px;">
+                        <label class="radio-label" style="flex: 1; font-size: 11px;">
+                            <input type="radio" name="replacementMode" value="ornaments" checked>
+                            <span class="radio-text">Change Ornaments</span>
+                        </label>
+                        <label class="radio-label" style="flex: 1; font-size: 11px;">
+                            <input type="radio" name="replacementMode" value="swatches">
+                            <span class="radio-text">Change Swatches Only</span>
+                        </label>
+                    </div>
+
+                    <!-- Ornaments Options (shown when ornaments mode selected) -->
+                    <div id="ornamentsOptions">
+                        <div class="section-header" style="margin-top: 10px;">
+                            <h3 style="font-size: 11px; color: #aaa;">Select Ornaments</h3>
+                            <button id="selectAllBtn" class="text-btn" style="font-size: 10px;">Select All</button>
+                        </div>
+                        <div class="ornament-types">
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="ornament-type" value="ayah" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon">آية</span>
+                                    <span class="ornament-name">Ayah</span>
+                                    <span class="ornament-size">4-5 × 5-7 mm</span>
+                                </span>
+                            </label>
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="ornament-type" value="sajdah" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon">سجدة</span>
+                                    <span class="ornament-name">Sajdah</span>
+                                    <span class="ornament-size">12-15 × 21-22 mm</span>
+                                </span>
+                            </label>
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="ornament-type" value="ruba" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon">ربع</span>
+                                    <span class="ornament-name">Ruba</span>
+                                    <span class="ornament-size">12-15 × 25-26 mm</span>
+                                </span>
+                            </label>
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="ornament-type" value="hizb" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon">حزب</span>
+                                    <span class="ornament-name">Hizb</span>
+                                    <span class="ornament-size">12-15 × 38-40 mm</span>
+                                </span>
+                            </label>
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="ornament-type" value="hizbx" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon">حزبx</span>
+                                    <span class="ornament-name">HizbX</span>
+                                    <span class="ornament-size">12-15 × 41-45 mm</span>
+                                </span>
+                            </label>
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="ornament-type" value="surah" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon">سورة</span>
+                                    <span class="ornament-name">Surah</span>
+                                    <span class="ornament-size">87-88 × 9-10 mm</span>
+                                </span>
+                            </label>
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="ornament-type" value="border" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon">إطار</span>
+                                    <span class="ornament-name">Border</span>
+                                    <span class="ornament-size">102-104 × 157-159 mm</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Swatches Options (shown when swatches mode selected) -->
+                    <div id="swatchesOptions" style="display: none; margin-top: 10px;">
+                        <div class="section-header">
+                            <h3 style="font-size: 11px; color: #aaa;">Select Swatches to Replace</h3>
+                            <button id="selectAllSwatchesBtn" class="text-btn" style="font-size: 10px;">Select All</button>
+                        </div>
+                        <div class="ornament-types" id="swatchesList">
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="swatch-type" value="001" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon" style="background: #ff6b6b; width: 20px; height: 20px; border-radius: 3px; display: inline-block;"></span>
+                                    <span class="ornament-name">Swatch 001</span>
+                                    <span class="ornament-size" id="swatch001Status">Waiting...</span>
+                                </span>
+                            </label>
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="swatch-type" value="002" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon" style="background: #4ecdc4; width: 20px; height: 20px; border-radius: 3px; display: inline-block;"></span>
+                                    <span class="ornament-name">Swatch 002</span>
+                                    <span class="ornament-size" id="swatch002Status">Waiting...</span>
+                                </span>
+                            </label>
+                            <label class="ornament-checkbox">
+                                <input type="checkbox" class="swatch-type" value="003" checked>
+                                <span class="ornament-box">
+                                    <span class="ornament-icon" style="background: #45b7d1; width: 20px; height: 20px; border-radius: 3px; display: inline-block;"></span>
+                                    <span class="ornament-name">Swatch 003</span>
+                                    <span class="ornament-size" id="swatch003Status">Waiting...</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div style="margin-top: 8px; padding: 8px; background: #2a2a2a; border-radius: 4px; font-size: 10px; color: #888;">
+                            <div>Template swatches will replace current document swatches with matching names</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spacer so content doesn't hide behind bottom nav -->
+            <div style="height: 120px;"></div>
+        </div>
+
+        <!-- Floating Action Buttons -->
+        <button id="scanBtn" class="fab-button scan-fab" title="Scan Document">
+            <svg viewBox="0 0 24 24" class="fab-icon" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" fill="none" stroke="white" stroke-width="2"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
+        <button id="processBtn" class="fab-button process-fab" title="Process">
+            <svg viewBox="0 0 24 24" class="fab-icon" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="5 3 19 12 5 21 5 3" fill="white"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- ===== TEMPLATES TAB ===== -->
+    <div id="templatesTab" class="tab-content">
+        <div class="scrollable-content">
+            <!-- Template Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Template</h2>
+                    <button id="saveTemplateBtn" class="icon-btn" title="Save Template Preference">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                    </button>
+                </div>
+                <div class="template-info">
+                    <div id="templatePath" class="template-path">No template selected</div>
+                    <div id="templateName" class="template-name">-</div>
+                </div>
+                <button id="browseTemplateBtn" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Browse Template
+                </button>
+            </div>
+
+            <!-- My Templates Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>My Templates</h2>
+                    <div style="display: flex; gap: 4px;">
+                        <button id="refreshTemplatesBtn" class="icon-btn" title="Refresh Folder">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <polyline points="1 20 1 14 7 14"></polyline>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="templatesFolderDisplay" style="font-size: 10px; color: var(--text-muted); margin-bottom: 8px; padding: 4px 8px; background: var(--bg-tertiary); border-radius: 4px;">
+                    Folder: not set
+                </div>
+                <div id="savedTemplatesList" class="saved-templates-list">
+                    <div class="empty-state">Loading templates...</div>
+                </div>
+            </div>
+
+            <!-- Ornaments Section -->
+            <div class="section ornaments-section">
+                <div class="section-header collapsible" onclick="toggleOrnaments()">
+                    <div class="header-left">
+                        <span class="dropdown-icon">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </span>
+                        <h2 id="ornamentsHeader">Ornaments (0/7)</h2>
+                    </div>
+                    <button id="refreshDesignsBtn" class="icon-btn" title="Refresh Ornaments" onclick="event.stopPropagation()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="designsList" class="designs-list">
+                    <div class="design-item placeholder">
+                        <span class="design-icon">📁</span>
+                        <span class="design-name">Select a template to view ornaments</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="height: 120px;"></div>
+        </div>
+    </div>
+
+    <!-- ===== LAYER COPY TAB ===== -->
+    <div id="layerCopyTab" class="tab-content">
+        <div class="scrollable-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Layer Copy</h1>
+                <span class="version">v1.0</span>
+            </div>
+
+            <!-- Current Document Layers -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Current Layers</h2>
+                    <button id="refreshLayersBtn" class="icon-btn" title="Refresh Layers">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="currentLayersList" class="layers-list">
+                    <div class="empty-state">No document open</div>
+                </div>
+                <button id="unifyLayersBtn" class="btn btn-primary" style="margin-top: 10px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Unify Layer Names
+                </button>
+            </div>
+
+            <!-- Mode Toggle -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Copy Mode</h2>
+                </div>
+                <div class="mode-toggle" style="display: flex; gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                    <button id="modeSingleFile" class="mode-btn active" style="flex: 1; padding: 10px; font-size: 12px; border: none; background: var(--accent); color: white; cursor: pointer;">Single File</button>
+                    <button id="modeRiwayah" class="mode-btn" style="flex: 1; padding: 10px; font-size: 12px; border: none; background: var(--card-bg); color: var(--text-secondary); cursor: pointer;">Riwayah to Riwayah</button>
+                </div>
+            </div>
+
+            <!-- Single File Copy -->
+            <div id="singleFileSection" class="section">
+                <div class="section-header">
+                    <h2>Copy from File</h2>
+                </div>
+                <div class="template-info" style="border-left-color: var(--success);">
+                    <div id="sourceFilePath" class="template-path">No source file selected</div>
+                    <div id="sourceFileName" class="template-name">-</div>
+                </div>
+                <button id="browseSourceFileBtn" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Browse Source File
+                </button>
+
+                <div style="margin-top: 12px;">
+                    <div class="section-header" style="margin-bottom: 8px;">
+                        <p style="font-size: 10px; color: var(--text-muted);">Select layers to copy:</p>
+                        <button id="refreshSourceLayersBtn" class="text-btn" style="font-size: 10px; display: none;">Refresh</button>
+                    </div>
+                    <div id="sourceLayersList" class="action-types">
+                        <div class="empty-state" style="font-size: 11px; padding: 12px;">Select a source file to see layers</div>
+                    </div>
+                </div>
+
+                <button id="copyLayersBtn" class="btn btn-primary" style="margin-top: 12px; background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copy & Replace Layers
+                </button>
+            </div>
+
+            <!-- Riwayah to Riwayah Copy -->
+            <div id="layerCopyRiwayahSection" class="section" style="display: none;">
+                <div class="section-header">
+                    <h2>Riwayah to Riwayah</h2>
+                </div>
+
+                <div class="template-info" style="border-left-color: var(--accent); margin-bottom: 10px;">
+                    <div id="mushafProjectPath" class="template-path">Loading mushaf files location...</div>
+                    <div id="mushafProjectName" class="template-name">-</div>
+                </div>
+                <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+                    <button id="refreshLayerCopyRiwayahsBtn" class="btn btn-primary" style="flex: 1; font-size: 11px; padding: 8px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        Refresh Riwayahs
+                    </button>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">Source Riwayah</label>
+                    <select id="sourceRiwayahSelect" class="ornament-select" style="width: 100%;">
+                        <option value="">Select source riwayah...</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">Target Riwayah</label>
+                    <select id="targetRiwayahSelect" class="ornament-select" style="width: 100%;">
+                        <option value="">Select target riwayah...</option>
+                    </select>
+                </div>
+
+                <div style="margin-top: 12px;">
+                    <div class="section-header" style="margin-bottom: 8px;">
+                        <p style="font-size: 10px; color: var(--text-muted);">Select layers to copy (scanned once from first source file):</p>
+                    </div>
+                    <div id="riwayahLayersList" class="action-types">
+                        <div class="empty-state" style="font-size: 11px; padding: 12px;">Select source riwayah to see layers</div>
+                    </div>
+                </div>
+
+                <div id="riwayahProgressArea" style="margin-top: 12px; display: none;">
+                    <div class="progress-bar-container" style="background: var(--border-color); border-radius: 4px; height: 8px; overflow: hidden;">
+                        <div id="riwayahProgressBar" style="background: linear-gradient(90deg, var(--accent), var(--accent-light)); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                    </div>
+                    <div id="riwayahProgressText" style="font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: center;">0 / 0</div>
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <button id="startRiwayahCopyBtn" class="btn btn-primary" style="flex: 1; background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Start Riwayah Copy
+                    </button>
+                    <button id="cancelRiwayahCopyBtn" class="btn btn-secondary" style="flex: 1; display: none; font-size: 11px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Layer Order Fix Section -->
+            <div class="section" style="margin-top: 20px; border-top: 1px solid #444; padding-top: 15px;">
+                <div class="section-header">
+                    <h2>Fix Layer Order</h2>
+                </div>
+                <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 10px;">
+                    Ensures: Ornaments (back) → Others → Quran Text (front)
+                </p>
+                <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                    <button id="fixCurrentLayerOrderBtn" class="btn btn-primary" style="flex: 1; font-size: 11px;">
+                        Fix Current Document
+                    </button>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">Target Riwayah</label>
+                    <select id="fixOrderRiwayahSelect" class="ornament-select" style="width: 100%;">
+                        <option value="">Select riwayah...</option>
+                    </select>
+                </div>
+                <button id="fixRiwayahLayerOrderBtn" class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); font-size: 11px;">
+                    Fix Layer Order for Riwayah
+                </button>
+                <div id="fixOrderProgressArea" style="margin-top: 12px; display: none;">
+                    <div class="progress-bar-container" style="background: var(--border-color); border-radius: 4px; height: 8px; overflow: hidden;">
+                        <div id="fixOrderProgressBar" style="background: linear-gradient(90deg, var(--accent), var(--accent-light)); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                    </div>
+                    <div id="fixOrderProgressText" style="font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: center;">0 / 0</div>
+                </div>
+            </div>
+
+            <div style="height: 120px;"></div>
+        </div>
+    </div>
+
+    <!-- ===== SETTINGS TAB ===== -->
+    <div id="settingsTab" class="tab-content">
+        <div class="settings-container">
+            <h2>Settings</h2>
+
+            <div class="settings-card">
+                <div class="section-title">Folders</div>
+                <div class="form-group">
+                    <label>Templates Folder</label>
+                    <div class="folder-input-group">
+                        <input type="text" id="templatesFolderPath" readonly placeholder="Select templates folder...">
+                        <button class="btn-secondary" id="btnBrowseTemplatesFolder">Browse</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mushaf Files Folder</label>
+                    <div class="folder-input-group">
+                        <input type="text" id="mushafFilesFolderPath" readonly placeholder="Select mushaf files folder...">
+                        <button class="btn-secondary" id="btnBrowseMushafFilesFolder">Browse</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mushaf Tasks Folder</label>
+                    <div class="folder-input-group">
+                        <input type="text" id="mushafTasksFolderPath" readonly placeholder="Select mushaf tasks folder...">
+                        <button class="btn-secondary" id="btnBrowseMushafTasksFolder">Browse</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn-success" id="btnAutoDetectFolders" style="width: 100%;"> Auto-Detect from Google Drive</button>
+                    <p id="autoDetectStatus" style="margin-top:6px;font-size:11px;color:var(--text-secondary);min-height:16px;"></p>
+                </div>
+
+                <div class="form-group" style="margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+                    <label style="font-size: 11px; color: var(--text-secondary);">Or paste mushafproject path:</label>
+                    <div class="folder-input-group">
+                        <input type="text" id="testPathInput" placeholder="e.g. G:/My Drive/mushafproject" style="font-size: 11px;">
+                        <button class="btn-secondary" id="btnTestPath" style="font-size: 11px; padding: 6px 10px;">Test &amp; Use</button>
+                    </div>
+                    <p id="testPathStatus" style="margin-top:4px;font-size:11px;color:var(--text-secondary);min-height:16px;"></p>
+                </div>
+
+                <div class="form-group" style="margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+                    <label style="font-size: 11px; color: var(--text-secondary);">Updates</label>
+                    <div style="display:flex;gap:8px;margin-top:6px;">
+                        <button class="btn-secondary" id="btnCheckUpdates" style="flex:1;font-size:11px;padding:6px 10px;">Check for Updates</button>
+                        <button class="btn-primary hidden" id="btnInstallUpdate" style="flex:1;font-size:11px;padding:6px 10px;">Install Update</button>
+                    </div>
+                    <p id="updateStatus" style="margin-top:4px;font-size:11px;color:var(--text-secondary);min-height:16px;"></p>
+                    <p style="margin-top:2px;font-size:10px;color:var(--text-muted);">Version: <span id="currentVersion">3.3.0</span></p>
+                </div>
+
+                <div class="settings-section">
+                    <h3>About</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                        Ornament Replacer v3.3.0 — Mushaf-Warsh Project<br>
+                        Replaces ornaments and aligns ayah markers in Adobe Illustrator.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Tab Navigation -->
+    <nav class="bottom-nav" id="tabNavigation">
+        <button class="bottom-tab-btn active" data-tab="home" onclick="if(window.switchTab)window.switchTab('home')">
+            <svg viewBox="0 0 24 24" class="tab-icon" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19,24H5c-2.757,0-5-2.243-5-5V9.724c0-1.665,.824-3.215,2.204-4.145L9.203,.855c1.699-1.146,3.895-1.146,5.594,0l7,4.724c1.379,.93,2.203,2.479,2.203,4.145v9.276c0,2.757-2.243,5-5,5Z"/>
+            </svg>
+        </button>
+        <button class="bottom-tab-btn" data-tab="templates" onclick="if(window.switchTab)window.switchTab('templates')">
+            <svg viewBox="0 0 24 24" class="tab-icon" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+            </svg>
+        </button>
+        <button class="bottom-tab-btn" data-tab="layerCopy" onclick="if(window.switchTab)window.switchTab('layerCopy')">
+            <svg viewBox="0 0 24 24" class="tab-icon" xmlns="http://www.w3.org/2000/svg">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" fill="currentColor"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </button>
+        <button class="bottom-tab-btn" data-tab="settings" onclick="if(window.switchTab)window.switchTab('settings')">
+            <svg viewBox="0 0 24 24" class="tab-icon" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1,4.75H3.736a3.728,3.728,0,0,0,7.195,0H23a1,1,0,0,0,0-2H10.931a3.728,3.728,0,0,0-7.195,0H1a1,1,0,0,0,0,2ZM7.333,2a1.75,1.75,0,1,1-1.75,1.75A1.752,1.752,0,0,1,7.333,2Z"/>
+                <path d="M23,11H20.264a3.727,3.727,0,0,0-7.194,0H1a1,1,0,0,0,0,2H13.07a3.727,3.727,0,0,0,7.194,0H23a1,1,0,0,0,0-2Zm-6.333,2.75A1.75,1.75,0,1,1,18.417,12,1.752,1.752,0,0,1,16.667,13.75Z"/>
+                <path d="M23,19.25H10.931a3.728,3.728,0,0,0-7.195,0H1a1,1,0,0,0,0,2H3.736a3.728,3.728,0,0,0,7.195,0H23a1,1,0,0,0,0-2ZM7.333,22a1.75,1.75,0,1,1,1.75-1.75A1.753,1.753,0,0,1,7.333,22Z"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Status Bar -->
+    <div id="statusBar" class="status-bar">
+        <span id="statusText">Ready</span>
+        <button onclick="closeStatusBar()" class="status-close-btn" title="Close">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Scan Result Modal -->
+    <div id="scanModal" class="modal-overlay hidden" onclick="if(event.target===this)closeScanModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Scan Results</h3>
+                <button class="icon-btn modal-close" onclick="closeScanModal()" title="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="result-subsection">
+                    <div class="subsection-header success">
+                        <span>Found</span>
+                    </div>
+                    <div id="scanFoundList" class="mini-list"></div>
+                </div>
+                <div class="result-subsection">
+                    <div class="subsection-header error">
+                        <span>Not Found</span>
+                    </div>
+                    <div id="scanNotFoundList" class="mini-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Result Modal -->
+    <div id="processModal" class="modal-overlay hidden" onclick="if(event.target===this)closeProcessModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Process Results</h3>
+                <button class="icon-btn modal-close" onclick="closeProcessModal()" title="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="result-subsection">
+                    <div class="subsection-header success">
+                        <span>Processed</span>
+                    </div>
+                    <div id="processSuccessList" class="mini-list"></div>
+                </div>
+                <div class="result-subsection">
+                    <div class="subsection-header error">
+                        <span>Errors</span>
+                    </div>
+                    <div id="processErrorsList" class="mini-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Juz Filter Modal -->
+    <div id="juzFilterModal" class="modal-overlay hidden" onclick="if(event.target===this)closeJuzFilterModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Select Juz</h3>
+                <button class="icon-btn modal-close" onclick="closeJuzFilterModal()" title="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="select-mode-toggle">
+                    <button class="mode-btn active" id="juzModeRange" onclick="setJuzMode('range')">Range</button>
+                    <button class="mode-btn" id="juzModeMulti" onclick="setJuzMode('multi')">Multiple</button>
+                </div>
+                <div id="juzRangeContainer" class="range-container hidden">
+                    <div class="range-row">
+                        <label>From</label>
+                        <select id="juzFrom" class="filter-dropdown"></select>
+                    </div>
+                    <div class="range-row">
+                        <label>To</label>
+                        <select id="juzTo" class="filter-dropdown"></select>
+                    </div>
+                </div>
+                <div id="juzCheckboxes" class="checkbox-grid"></div>
+                <div class="modal-actions" style="margin-top: 12px;">
+                    <button class="btn btn-secondary" onclick="clearJuzFilter()" style="font-size: 11px;">Clear</button>
+                    <button class="btn btn-primary" onclick="applyJuzFilter()" style="font-size: 11px;">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Surah Filter Modal -->
+    <div id="surahFilterModal" class="modal-overlay hidden" onclick="if(event.target===this)closeSurahFilterModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Select Surah</h3>
+                <button class="icon-btn modal-close" onclick="closeSurahFilterModal()" title="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="select-mode-toggle">
+                    <button class="mode-btn active" id="surahModeRange" onclick="setSurahMode('range')">Range</button>
+                    <button class="mode-btn" id="surahModeMulti" onclick="setSurahMode('multi')">Multiple</button>
+                </div>
+                <div id="surahRangeContainer" class="range-container hidden">
+                    <div class="range-row">
+                        <label>From</label>
+                        <select id="surahFrom" class="filter-dropdown"></select>
+                    </div>
+                    <div class="range-row">
+                        <label>To</label>
+                        <select id="surahTo" class="filter-dropdown"></select>
+                    </div>
+                </div>
+                <div id="surahCheckboxes" class="checkbox-list"></div>
+                <div class="modal-actions" style="margin-top: 12px;">
+                    <button class="btn btn-secondary" onclick="clearSurahFilter()" style="font-size: 11px;">Clear</button>
+                    <button class="btn btn-primary" onclick="applySurahFilter()" style="font-size: 11px;">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./lib/CSInterface.js"></script>
+    <script src="./lib/drive-scanner.js"></script>
+    <!-- What's New / Changelog Modal -->
+    <div id="changelogModal" class="modal-overlay hidden" onclick="if(event.target===this)document.getElementById('changelogModal').classList.add('hidden')">
+        <div class="modal-content changelog-modal-content">
+            <div class="modal-header">
+                <h3>🎉 What's New</h3>
+                <span class="changelog-version" id="changelogVersion">v3.3.0</span>
+            </div>
+            <div class="changelog-body" id="changelogBody">
+                <!-- Populated by JS -->
+            </div>
+            <div class="modal-actions">
+                <button id="changelogCloseBtn" class="btn btn-primary">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./lib/updater.js"></script>
+    <script src="./lib/main.js"></script>
+</body>
+
+</html>

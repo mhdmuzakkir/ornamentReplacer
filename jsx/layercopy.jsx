@@ -362,7 +362,7 @@ function fixLayerOrder() {
     return JSON.stringify(result);
 }
 
-function fixLayerOrderForRiwayah(riwayahFolderPath) {
+function fixLayerOrderForRiwayah(riwayahFolderPath, dontSave) {
     var result = { success: false, processed: 0, errors: [], message: "" };
     try {
         var folder = new Folder(riwayahFolderPath.replace(/\//g, Folder.fs === "Macintosh" ? '/' : '\\'));
@@ -395,14 +395,20 @@ function fixLayerOrderForRiwayah(riwayahFolderPath) {
                 }
                 
                 if (moved > 0) {
-                    doc.save();
+                    if (!dontSave) {
+                        doc.save();
+                    }
                     result.processed++;
                 }
             } catch (e) {
                 result.errors.push({ file: file.name, error: e.toString() });
             }
             
-            if (!wasOpen) { try { doc.close(SaveOptions.SAVECHANGES); } catch (e) {} }
+            if (!wasOpen) { 
+                try { 
+                    doc.close(dontSave ? SaveOptions.DONOTSAVECHANGES : SaveOptions.SAVECHANGES); 
+                } catch (e) {} 
+            }
             
             // Pause after every 5 files to let Illustrator breathe
             if ((i + 1) % 5 === 0 && i < aiFiles.length - 1) {

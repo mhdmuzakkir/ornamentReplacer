@@ -1372,7 +1372,7 @@ function processSingleFile(options) {
                         result.errors.push({type: "saveAs", reason: e.message});
                     }
                 }
-            } else if (options.autoSave) {
+            } else if (options.autoSave && options.saveMode !== "dontSave" && !options.dontSave) {
                 try { 
                     doc.save(); 
                     result.message = "File overwritten successfully";
@@ -1614,7 +1614,7 @@ function processBatch(options) {
                             fileErrors.push("save failed: " + e.message);
                         }
                     }
-                } else {
+                } else if (options.saveMode !== "dontSave") {
                     try {
                         doc.save();
                     } catch (e) {

@@ -66,6 +66,32 @@ if exist "%UPDATE_DIR%" (
 )
 if exist "%ZIP_FILE%" del /F /Q "%ZIP_FILE%" 2>nul
 
+:: ==========================================================
+::  GIT FIRST: If this is a cloned repo, use git pull
+:: ==========================================================
+if exist "%TARGET_DIR%\.git" (
+    echo {"status":"updating","stage":"git","message":"Git repository detected. Running git pull..."} > "%STATUS_DIR%\status.json"
+    echo Git repository detected. Running git pull...
+    cd /d "%TARGET_DIR%"
+    git pull origin main >nul 2>&1
+    if !errorlevel! equ 0 (
+        echo {"status":"done","stage":"install","message":"Updated via git pull. Please restart Illustrator."} > "%STATUS_DIR%\status.json"
+        echo.
+        echo ==========================================
+        echo   SUCCESS - Updated via Git
+        echo ==========================================
+        echo.
+        if "%~1"=="" pause
+        exit /b 0
+    ) else (
+        echo [ERROR] git pull failed. Please resolve conflicts manually,
+        echo         or remove the .git folder to use ZIP fallback.
+        echo {"status":"error","stage":"git","message":"git pull failed. Resolve conflicts manually or remove .git to use ZIP fallback."} > "%STATUS_DIR%\status.json"
+        if "%~1"=="" pause
+        exit /b 1
+    )
+)
+
 :: Write status
 echo {"status":"downloading","stage":"download","message":"Downloading update from GitHub..."} > "%STATUS_DIR%\status.json"
 

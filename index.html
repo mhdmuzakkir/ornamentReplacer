@@ -51,7 +51,7 @@
                 </div>
                 <div class="form-group">
                     <select id="riwayahSelect" class="riwayah-dropdown">
-                        <option value="">All Riwayahs</option>
+                        <option value="">Select riwayah</option>
                     </select>
                 </div>
                 <p style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">
@@ -171,6 +171,17 @@
                             <span class="action-name">Ornament Replacement</span>
                         </span>
                     </label>
+                    <label class="action-checkbox">
+                        <input type="checkbox" id="fixLayerOrderAction">
+                        <span class="action-box fix-layer-order">
+                            <span class="action-icon">⥂</span>
+                            <span class="action-name">Fix Layer Order</span>
+                        </span>
+                    </label>
+                </div>
+                <div class="execution-order" id="executionOrderBadge" style="display: none;">
+                    <span class="execution-label">Run order:</span>
+                    <span id="executionOrderItems"></span>
                 </div>
 
                 <!-- Batch Controls -->
@@ -317,6 +328,25 @@
                 </div>
             </div>
 
+            <!-- Fix Layer Order Section (shown when action checked) -->
+            <div class="section" id="fixLayerOrderSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Fix Layer Order</h2>
+                </div>
+                <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 10px;">
+                    Ensures: Ornaments (back) → Others → Quran Text (front)
+                </p>
+                <button id="fixCurrentLayerOrderBtn" class="btn btn-primary" style="width: 100%; font-size: 11px;">
+                    Fix Current Document
+                </button>
+                <div id="fixOrderProgressArea" style="margin-top: 12px; display: none;">
+                    <div class="progress-bar-container" style="background: var(--border-color); border-radius: 4px; height: 8px; overflow: hidden;">
+                        <div id="fixOrderProgressBar" style="background: linear-gradient(90deg, var(--accent), var(--accent-light)); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                    </div>
+                    <div id="fixOrderProgressText" style="font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: center;">0 / 0</div>
+                </div>
+            </div>
+
             <!-- Spacer so content doesn't hide behind bottom nav -->
             <div style="height: 120px;"></div>
         </div>
@@ -338,30 +368,6 @@
     <!-- ===== TEMPLATES TAB ===== -->
     <div id="templatesTab" class="tab-content">
         <div class="scrollable-content">
-            <!-- Template Section -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>Template</h2>
-                    <button id="saveTemplateBtn" class="icon-btn" title="Save Template Preference">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                            <polyline points="7 3 7 8 15 8"></polyline>
-                        </svg>
-                    </button>
-                </div>
-                <div class="template-info">
-                    <div id="templatePath" class="template-path">No template selected</div>
-                    <div id="templateName" class="template-name">-</div>
-                </div>
-                <button id="browseTemplateBtn" class="btn btn-primary">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    Browse Template
-                </button>
-            </div>
-
             <!-- My Templates Section -->
             <div class="section">
                 <div class="section-header">
@@ -382,6 +388,12 @@
                 <div id="savedTemplatesList" class="saved-templates-list">
                     <div class="empty-state">Loading templates...</div>
                 </div>
+                <button id="useTemplateOnceBtn" class="btn btn-secondary" style="margin-top: 10px; width: 100%; font-size: 11px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Use Template Once
+                </button>
             </div>
 
             <!-- Ornaments Section -->
@@ -573,25 +585,19 @@
                     Ensures: Ornaments (back) → Others → Quran Text (front)
                 </p>
                 <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                    <button id="fixCurrentLayerOrderBtn" class="btn btn-primary" style="flex: 1; font-size: 11px;">
+                    <button id="fixCurrentLayerOrderBtnLayer" class="btn btn-primary" style="flex: 1; font-size: 11px;">
                         Fix Current Document
                     </button>
                 </div>
                 <div class="form-group" style="margin-bottom: 10px;">
                     <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">Target Riwayah</label>
-                    <select id="fixOrderRiwayahSelect" class="ornament-select" style="width: 100%;">
+                    <select id="fixOrderRiwayahSelectLayer" class="ornament-select" style="width: 100%;">
                         <option value="">Select riwayah...</option>
                     </select>
                 </div>
-                <button id="fixRiwayahLayerOrderBtn" class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); font-size: 11px;">
+                <button id="fixRiwayahLayerOrderBtnLayer" class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); font-size: 11px;">
                     Fix Layer Order for Riwayah
                 </button>
-                <div id="fixOrderProgressArea" style="margin-top: 12px; display: none;">
-                    <div class="progress-bar-container" style="background: var(--border-color); border-radius: 4px; height: 8px; overflow: hidden;">
-                        <div id="fixOrderProgressBar" style="background: linear-gradient(90deg, var(--accent), var(--accent-light)); height: 100%; width: 0%; transition: width 0.3s;"></div>
-                    </div>
-                    <div id="fixOrderProgressText" style="font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: center;">0 / 0</div>
-                </div>
             </div>
 
             <div style="height: 120px;"></div>
@@ -697,6 +703,110 @@
                 <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
         </button>
+    </div>
+
+    <!-- Resume Banner -->
+    <div id="resumeBanner" class="resume-banner hidden">
+        <div class="resume-info">
+            <span class="resume-icon">⏸</span>
+            <span class="resume-text" id="resumeText">Paused batch available</span>
+        </div>
+        <div class="resume-actions">
+            <button class="btn btn-primary" id="resumeBatchBtn" style="font-size: 11px; padding: 6px 12px;">Resume</button>
+            <button class="btn btn-secondary" id="dismissResumeBtn" style="font-size: 11px; padding: 6px 12px;">Dismiss</button>
+        </div>
+    </div>
+
+    <!-- Batch Preview Modal -->
+    <div id="batchPreviewModal" class="modal-overlay hidden" onclick="if(event.target===this)hideBatchPreviewModal()">
+        <div class="modal-content batch-preview-content">
+            <div class="modal-header">
+                <h3>Batch Preview</h3>
+                <button class="icon-btn modal-close" onclick="hideBatchPreviewModal()" title="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="batch-preview-stats">
+                    <div class="preview-stat">
+                        <span class="preview-stat-value" id="previewFileCount">0</span>
+                        <span class="preview-stat-label">Files</span>
+                    </div>
+                    <div class="preview-stat">
+                        <span class="preview-stat-value" id="previewChunkCount">0</span>
+                        <span class="preview-stat-label">Chunks</span>
+                    </div>
+                </div>
+                <div class="preview-detail">
+                    <span class="preview-detail-label">Riwayah:</span>
+                    <span class="preview-detail-value" id="previewRiwayah">-</span>
+                </div>
+                <div class="preview-detail">
+                    <span class="preview-detail-label">Filters:</span>
+                    <span class="preview-detail-value" id="previewFilters">None</span>
+                </div>
+                <div class="preview-detail">
+                    <span class="preview-detail-label">Actions:</span>
+                    <span class="preview-detail-value" id="previewActions">-</span>
+                </div>
+                <div class="preview-detail">
+                    <span class="preview-detail-label">Chunk size:</span>
+                    <span class="preview-detail-value">6 files</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="hideBatchPreviewModal()" style="font-size: 11px;">Cancel</button>
+                <button class="btn btn-primary" id="confirmBatchBtn" style="font-size: 11px;">Start Batch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batch Progress Overlay -->
+    <div id="batchProgressOverlay" class="progress-overlay hidden">
+        <div class="progress-overlay-content">
+            <h3 class="progress-title">Processing Batch</h3>
+            <div class="progress-bar-wrapper">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+            </div>
+            <div class="progress-stats">
+                <div class="progress-stat">
+                    <span class="progress-stat-label">Chunk</span>
+                    <span class="progress-stat-value" id="progressChunk">0 / 0</span>
+                </div>
+                <div class="progress-stat">
+                    <span class="progress-stat-label">Files</span>
+                    <span class="progress-stat-value" id="progressFiles">0 / 0</span>
+                </div>
+                <div class="progress-stat">
+                    <span class="progress-stat-label">Errors</span>
+                    <span class="progress-stat-value" id="progressErrors">0</span>
+                </div>
+            </div>
+            <div class="progress-current-file" id="progressCurrentFile">Preparing...</div>
+            <div class="progress-status" id="progressStatusMessage">Scanning files...</div>
+            <div class="progress-actions">
+                <button class="btn btn-secondary" id="progressStopBtn" style="font-size: 11px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                        <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
+                    </svg>
+                    Stop
+                </button>
+                <button class="btn btn-danger" id="progressCancelBtn" style="font-size: 11px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                    Cancel
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Scan Result Modal -->

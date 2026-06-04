@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ornament Replacer</title>
-    <link rel="stylesheet" href="./lib/styles.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
@@ -22,13 +22,17 @@
             <div class="section">
                 <h2>Mode</h2>
                 <div class="mode-selector">
-                    <label class="radio-label">
+                    <label class="radio-card">
                         <input type="radio" name="mode" value="single" checked>
-                        <span class="radio-text">Single File</span>
+                        <span class="radio-card-box">
+                            <span class="radio-card-text">Single File</span>
+                        </span>
                     </label>
-                    <label class="radio-label">
+                    <label class="radio-card">
                         <input type="radio" name="mode" value="batch">
-                        <span class="radio-text">Batch</span>
+                        <span class="radio-card-box">
+                            <span class="radio-card-text">Batch</span>
+                        </span>
                     </label>
                 </div>
             </div>
@@ -89,22 +93,30 @@
                 <div class="save-options" style="margin-top: 15px; border-top: 1px solid #444; padding-top: 15px;">
                     <h3 style="font-size: 12px; margin-bottom: 10px; color: #aaa;">Save Mode</h3>
 
-                    <div class="mode-selector grid-2x2" style="margin-bottom: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px;">
-                        <label class="radio-label" style="font-size: 11px; margin: 0;">
+                    <div class="mode-selector grid-2x2">
+                        <label class="radio-card">
                             <input type="radio" name="saveMode" value="overwrite" checked>
-                            <span class="radio-text">Overwrite</span>
+                            <span class="radio-card-box">
+                                <span class="radio-card-text">Overwrite</span>
+                            </span>
                         </label>
-                        <label class="radio-label" style="font-size: 11px; margin: 0;">
+                        <label class="radio-card">
                             <input type="radio" name="saveMode" value="dontSave">
-                            <span class="radio-text">Don't Save</span>
+                            <span class="radio-card-box">
+                                <span class="radio-card-text">Don't Save</span>
+                            </span>
                         </label>
-                        <label class="radio-label" style="font-size: 11px; margin: 0;">
+                        <label class="radio-card">
                             <input type="radio" name="saveMode" value="newFile">
-                            <span class="radio-text">Save As</span>
+                            <span class="radio-card-box">
+                                <span class="radio-card-text">Save As</span>
+                            </span>
                         </label>
-                        <label class="radio-label" style="font-size: 11px; margin: 0;">
+                        <label class="radio-card">
                             <input type="radio" name="saveMode" value="sameAsTemplate">
-                            <span class="radio-text">As Template</span>
+                            <span class="radio-card-box">
+                                <span class="radio-card-text">As Template</span>
+                            </span>
                         </label>
                     </div>
 
@@ -185,14 +197,18 @@
 
                 <!-- Replacement Mode (shown only when ornament replacement is checked) -->
                 <div id="replacementModeSection" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #444;">
-                    <div class="mode-selector" style="margin-bottom: 12px; display: flex; gap: 8px;">
-                        <label class="radio-label" style="flex: 1; font-size: 11px;">
+                    <div class="mode-selector">
+                        <label class="radio-card">
                             <input type="radio" name="replacementMode" value="ornaments" checked>
-                            <span class="radio-text">Change Ornaments</span>
+                            <span class="radio-card-box">
+                                <span class="radio-card-text">Change Ornaments</span>
+                            </span>
                         </label>
-                        <label class="radio-label" style="flex: 1; font-size: 11px;">
+                        <label class="radio-card">
                             <input type="radio" name="replacementMode" value="swatches">
-                            <span class="radio-text">Change Swatches Only</span>
+                            <span class="radio-card-box">
+                                <span class="radio-card-text">Change Swatches Only</span>
+                            </span>
                         </label>
                     </div>
 
@@ -530,7 +546,7 @@
                 </div>
 
                 <div style="display: flex; gap: 8px; margin-top: 12px;">
-                    <button id="startRiwayahCopyBtn" class="btn btn-primary" style="flex: 1; background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
+                    <button id="startRiwayahCopyBtn" class="btn btn-primary" style="flex: 1; background: linear-gradient(135deg, #4a9eff 0%, #3a8eef 100%);">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -612,9 +628,6 @@
                 </div>
                 <div class="form-group">
                     <button class="btn-success" id="btnAutoDetectFolders" style="width: 100%;"> Auto-Detect from Google Drive</button>
-                    <div id="driveStatusIcon" style="display:none;justify-content:center;margin-top:8px;">
-                        <img src="assets/icons/drive.svg" alt="Google Drive" style="width:48px;height:auto;">
-                    </div>
                     <p id="autoDetectStatus" style="margin-top:6px;font-size:11px;color:var(--text-secondary);min-height:16px;"></p>
                 </div>
 
@@ -640,7 +653,7 @@
                 <div class="settings-section">
                     <h3>About</h3>
                     <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-                        Ornament Replacer <span id="aboutVersion">v3.4.1</span> — Mushaf-Warsh Project<br>
+                        Ornament Replacer v3.4.0 — Mushaf-Warsh Project<br>
                         Replaces ornaments and aligns ayah markers in Adobe Illustrator.
                     </p>
                 </div>
@@ -816,25 +829,6 @@
         </div>
     </div>
 
-    <!-- Drive Missing Modal -->
-    <div id="driveMissingModal" class="modal-overlay hidden">
-        <div class="modal-content" style="text-align: center; max-width: 380px; padding: 20px;">
-            <div style="margin-bottom: 16px; display: flex; justify-content: center;">
-                <img src="assets/icons/drive.svg" alt="Google Drive" style="width:72px;height:auto;">
-            </div>
-            <h2 style="margin-bottom: 8px;">Google Drive Not Found</h2>
-            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
-                The folder saved in settings is on a drive that is currently disconnected or unavailable.
-            </p>
-            <p id="driveMissingPath" style="font-size: 12px; color: var(--text-muted); word-break: break-all; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; text-align: left;"></p>
-            <div style="display: flex; gap: 10px;">
-                <button id="retryDriveBtn" class="btn-primary" style="flex: 1;">Retry</button>
-                <button id="scanDrivesBtn" class="btn-success" style="flex: 1;">Scan Drives</button>
-                <button id="changeDriveBtn" class="btn-secondary" style="flex: 1;">Change Folder</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Scripts -->
     <script src="./lib/CSInterface.js"></script>
     <script src="./lib/drive-scanner.js"></script>
@@ -843,7 +837,7 @@
         <div class="modal-content changelog-modal-content">
             <div class="modal-header">
                 <h3>🎉 What's New</h3>
-                <span class="changelog-version" id="changelogVersion">v3.4.1</span>
+                <span class="changelog-version" id="changelogVersion">v3.4.0</span>
             </div>
             <div class="changelog-body" id="changelogBody">
                 <!-- Populated by JS -->

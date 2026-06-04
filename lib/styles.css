@@ -1880,33 +1880,6 @@ body {
     color: var(--accent-orange);
 }
 
-.layer-badge.potential {
-    background: rgba(241, 196, 15, 0.2);
-    color: #f1c40f;
-}
-
-.layer-item.potential {
-    border-left-color: #f1c40f;
-}
-
-.layer-rename-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 2px;
-    border-radius: 3px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s, background 0.2s;
-}
-
-.layer-rename-btn:hover {
-    color: var(--accent);
-    background: rgba(74, 158, 255, 0.1);
-}
-
 /* Responsive */
 @media (max-width: 300px) {
     .ornament-types {

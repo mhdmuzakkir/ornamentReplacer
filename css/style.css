@@ -1,0 +1,1474 @@
+/* Ornament Replacer - Professional Dark Theme */
+/* Matches Adobe Illustrator's dark mode - Mushaf Task Manager theme */
+/* Based on Symbol Palette design system */
+
+:root {
+    --bg-primary: #2b2b2b;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #3a3a3a;
+    --bg-hover: #404040;
+    --bg-active: #4a4a4a;
+
+    --text-primary: #cccccc;
+    --text-secondary: #999999;
+    --text-muted: #666666;
+    --text-inverse: #2b2b2b;
+
+    --accent-blue: #4a9eff;
+    --accent-green: #2ecc71;
+    --accent-orange: #f39c12;
+    --accent-red: #e74c3c;
+    --accent-purple: #4a9eff;
+
+    --border-color: #444444;
+    --border-light: #555555;
+
+    --card-bg: #252525;
+    --card-border: #333333;
+    --radius-lg: 12px;
+    --radius-pill: 24px;
+
+    --success-bg: rgba(46, 204, 113, 0.15);
+    --warning-bg: rgba(243, 156, 18, 0.15);
+    --error-bg: rgba(231, 76, 60, 0.15);
+
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --radius: 4px;
+
+    --nav-height: 64px;
+    --fab-size: 52px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    overflow-x: hidden;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+/* ==================== LAYOUT ==================== */
+.tab-content {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 12px;
+    padding-bottom: calc(var(--nav-height) + 12px);
+}
+
+.tab-content.active {
+    display: flex;
+}
+
+.scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* ==================== HEADER ==================== */
+.header {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.header h1 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.version {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 2px 8px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+/* ==================== SECTIONS ==================== */
+.section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.section h2 {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.section h3 {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 4px 8px;
+    gap: 8px;
+}
+
+.section-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-blue), #3a8eef);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #3a8eef;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+}
+
+.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-light);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--accent-green), #27ae60);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #27ae60;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--accent-red), #c0392b);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-large {
+    padding: 12px 24px;
+    font-size: 13px;
+}
+
+/* Icon Button */
+.icon-btn {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.icon-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.icon-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Text Button */
+.text-btn {
+    background: none;
+    border: none;
+    color: var(--accent-blue);
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    padding: 2px 6px;
+    border-radius: var(--radius);
+}
+
+.text-btn:hover {
+    background: rgba(74, 158, 255, 0.1);
+}
+
+/* ==================== FORM ELEMENTS ==================== */
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+select,
+.riwayah-dropdown,
+.ornament-select,
+.filter-dropdown {
+    width: 100%;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+select:focus,
+.riwayah-dropdown:focus,
+.ornament-select:focus,
+.filter-dropdown:focus {
+    border-color: var(--accent-blue);
+}
+
+select option,
+.riwayah-dropdown option,
+.ornament-select option {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 12px;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+input[type="text"]::placeholder {
+    color: var(--text-muted);
+}
+
+/* ==================== RADIO & CHECKBOX ==================== */
+.mode-selector {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.mode-selector.grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+/* Radio cards (like action boxes) */
+.radio-card {
+    display: flex;
+    align-items: stretch;
+    cursor: pointer;
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.radio-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.radio-card-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: all 0.2s;
+    min-height: 40px;
+    text-align: center;
+}
+
+.radio-card:hover .radio-card-box {
+    border-color: var(--accent-blue);
+    background: var(--bg-hover);
+}
+
+.radio-card input[type="radio"]:checked + .radio-card-box {
+    border-color: var(--accent-blue);
+    background: rgba(74, 158, 255, 0.12);
+    color: var(--accent-blue);
+}
+
+.radio-card-text {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.radio-card input[type="radio"]:checked + .radio-card-box .radio-card-text {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+/* ==================== TEMPLATE RADIO CARDS ==================== */
+.template-radio-label {
+    display: flex;
+    align-items: stretch;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 4px;
+}
+
+.template-radio-label:last-child {
+    margin-bottom: 0;
+}
+
+.template-radio-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.template-radio-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: all 0.2s;
+    min-height: 36px;
+    position: relative;
+}
+
+.template-radio-label:hover .template-radio-box {
+    border-color: var(--accent-blue);
+    background: var(--bg-hover);
+}
+
+.template-radio-label.active .template-radio-box,
+.template-radio-label input[type="radio"]:checked + .template-radio-box {
+    border-color: var(--accent-blue);
+    background: rgba(74, 158, 255, 0.12);
+    box-shadow: 0 0 0 1px var(--accent-blue);
+}
+
+.template-radio-text {
+    font-size: 11px;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+}
+
+.template-radio-label.active .template-radio-text,
+.template-radio-label input[type="radio"]:checked + .template-radio-box .template-radio-text {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+.remove-template-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0 4px;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: all 0.2s;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+.remove-template-btn:hover {
+    opacity: 1;
+    color: var(--accent-red);
+}
+
+/* Fallback: old radio-label style (kept for any remaining uses) */
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 6px 10px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: all 0.2s;
+    flex: 1;
+    min-width: 0;
+}
+
+.radio-label:hover {
+    border-color: var(--accent-blue);
+    background: var(--bg-hover);
+}
+
+.radio-label input[type="radio"] {
+    flex-shrink: 0;
+    accent-color: var(--accent-blue);
+}
+
+.radio-text {
+    font-size: 11px;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 6px 0;
+    transition: all 0.2s;
+}
+
+.checkbox-label input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-blue);
+    cursor: pointer;
+}
+
+.checkbox-text {
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+/* ==================== ACTION CHECKBOXES ==================== */
+.action-types {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.action-checkbox {
+    display: flex;
+    align-items: stretch;
+    cursor: pointer;
+    position: relative;
+}
+
+.action-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.action-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: all 0.2s;
+    min-height: 44px;
+}
+
+.action-checkbox input[type="checkbox"]:checked + .action-box {
+    border-color: var(--accent-blue);
+    background: rgba(74, 158, 255, 0.08);
+}
+
+.action-checkbox input[type="checkbox"]:checked + .action-box.ayah-align {
+    border-color: var(--accent-blue);
+    background: rgba(74, 158, 255, 0.08);
+}
+
+.action-checkbox input[type="checkbox"]:checked + .action-box.ornament-replace {
+    border-color: var(--accent-green);
+    background: rgba(46, 204, 113, 0.08);
+}
+
+.action-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.action-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* ==================== ORNAMENT CHECKBOXES ==================== */
+.ornament-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+}
+
+.ornament-checkbox {
+    cursor: pointer;
+    position: relative;
+}
+
+.ornament-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ornament-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 6px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    min-height: 70px;
+    gap: 4px;
+}
+
+.ornament-checkbox:hover .ornament-box {
+    background: var(--bg-hover);
+}
+
+.ornament-checkbox input[type="checkbox"]:checked + .ornament-box {
+    border-color: var(--accent-blue);
+    background: rgba(74, 158, 255, 0.1);
+}
+
+.ornament-icon {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+}
+
+.ornament-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.ornament-size {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* ==================== FILTER CARDS ==================== */
+.filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.filter-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 60px;
+}
+
+.filter-card:hover {
+    border-color: var(--accent-blue);
+    background: var(--bg-hover);
+    transform: translateY(-1px);
+}
+
+.filter-card.has-filter {
+    border-color: var(--accent-green);
+    background: rgba(46, 204, 113, 0.08);
+}
+
+.filter-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-count {
+    font-size: 10px;
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+/* ==================== TEMPLATE INFO ==================== */
+.template-info {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--accent-blue);
+}
+
+.template-path {
+    font-size: 11px;
+    color: var(--text-muted);
+    word-break: break-all;
+    margin-bottom: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.template-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* ==================== DESIGNS / TEMPLATES LISTS ==================== */
+.designs-list,
+.saved-templates-list,
+.layers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--bg-primary);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+}
+
+.design-item,
+.saved-template-item,
+.layer-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius);
+    font-size: 11px;
+    transition: background 0.2s;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.design-item:hover,
+.saved-template-item:hover,
+.layer-item:hover {
+    background: var(--bg-hover);
+}
+
+.design-item.selected,
+.saved-template-item.selected,
+.layer-item.selected {
+    border-left-color: var(--accent-blue);
+    background: rgba(74, 158, 255, 0.08);
+}
+
+.design-item .design-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.design-item .design-name {
+    flex: 1;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.empty-state {
+    color: var(--text-muted);
+    font-size: 11px;
+    text-align: center;
+    padding: 12px;
+    font-style: italic;
+}
+
+/* ==================== OPTIONS LIST ==================== */
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.save-options {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ==================== PROGRESS BAR ==================== */
+.progress-bar-container {
+    background: var(--border-color);
+    border-radius: var(--radius);
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-bar-container > div {
+    background: linear-gradient(90deg, var(--accent-blue), #6ab3ff);
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s;
+    border-radius: var(--radius);
+}
+
+/* ==================== FLOATING ACTION BUTTONS ==================== */
+.fab-button {
+    position: fixed;
+    width: var(--fab-size);
+    height: var(--fab-size);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+    z-index: 100;
+    padding: 0;
+}
+
+.fab-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.fab-button:active {
+    transform: scale(0.95);
+}
+
+.fab-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.scan-fab {
+    bottom: calc(var(--nav-height) + 16px);
+    right: 72px;
+    background: linear-gradient(135deg, var(--accent-blue), #3a8eef);
+}
+
+.process-fab {
+    bottom: calc(var(--nav-height) + 16px);
+    right: 12px;
+    background: linear-gradient(135deg, var(--accent-green), #27ae60);
+}
+
+/* ==================== BOTTOM NAVIGATION ==================== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-height);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 200;
+    padding: 0 8px;
+}
+
+.bottom-tab-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: var(--radius-lg);
+    flex: 1;
+    max-width: 80px;
+}
+
+.bottom-tab-btn:hover {
+    color: var(--text-secondary);
+    background: var(--bg-hover);
+}
+
+.bottom-tab-btn.active {
+    color: var(--accent-blue);
+    background: rgba(74, 158, 255, 0.1);
+}
+
+.tab-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* ==================== STATUS BAR ==================== */
+.status-bar {
+    position: fixed;
+    bottom: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: var(--bg-tertiary);
+    border-top: 1px solid var(--border-color);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-secondary);
+    z-index: 150;
+    gap: 8px;
+}
+
+.status-bar.hidden {
+    display: none;
+}
+
+.status-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.status-close-btn:hover {
+    color: var(--text-primary);
+}
+
+/* ==================== MODALS ==================== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+.modal-overlay:not(.hidden) {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 420px;
+    min-width: 0;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--card-border);
+    gap: 8px;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-close {
+    flex-shrink: 0;
+}
+
+.modal-body {
+    padding: 16px 20px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding: 12px 20px;
+    border-top: 1px solid var(--card-border);
+    flex-wrap: wrap;
+}
+
+.modal-actions .btn {
+    font-size: 11px;
+    padding: 6px 14px;
+}
+
+/* Modal subsections */
+.result-subsection {
+    margin-bottom: 12px;
+}
+
+.result-subsection:last-child {
+    margin-bottom: 0;
+}
+
+.subsection-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.subsection-header.success {
+    background: var(--success-bg);
+    color: var(--accent-green);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.subsection-header.error {
+    background: var(--error-bg);
+    color: var(--accent-red);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.mini-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 120px;
+    overflow-y: auto;
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    padding: 6px;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.mini-list:empty::before {
+    content: 'None';
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 4px;
+}
+
+/* ==================== SELECT MODE TOGGLE ==================== */
+.select-mode-toggle {
+    display: flex;
+    gap: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    margin-bottom: 12px;
+}
+
+.select-mode-toggle .mode-btn {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 11px;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.select-mode-toggle .mode-btn.active {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.select-mode-toggle .mode-btn:hover:not(.active) {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+/* ==================== RANGE CONTAINER ==================== */
+.range-container {
+    margin-bottom: 12px;
+}
+
+.range-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.range-row label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    min-width: 40px;
+    font-weight: 500;
+}
+
+.range-row select {
+    flex: 1;
+}
+
+/* ==================== CHECKBOX GRID / LIST ==================== */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 4px;
+}
+
+.checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 4px;
+}
+
+.checkbox-grid label,
+.checkbox-list label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 6px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius);
+    font-size: 11px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.checkbox-grid label:hover,
+.checkbox-list label:hover {
+    background: var(--bg-hover);
+}
+
+.checkbox-grid label input,
+.checkbox-list label input {
+    accent-color: var(--accent-blue);
+    cursor: pointer;
+}
+
+/* ==================== SETTINGS ==================== */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 12px;
+    padding-bottom: calc(var(--nav-height) + 12px);
+}
+
+.settings-container h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.settings-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.settings-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.settings-section h3 {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.settings-section p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Folder Input Group */
+.folder-input-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.folder-input-group input {
+    flex: 1;
+    min-width: 0;
+}
+
+.folder-input-group button {
+    flex-shrink: 0;
+}
+
+/* ==================== CHANGELOG MODAL ==================== */
+.changelog-modal-content {
+    max-width: 360px;
+}
+
+.changelog-version {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 2px 8px;
+    border-radius: var(--radius);
+}
+
+.changelog-body {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.changelog-body ul {
+    margin: 8px 0;
+    padding-left: 18px;
+}
+
+.changelog-body li {
+    margin-bottom: 4px;
+}
+
+/* ==================== PROCESSING STATES ==================== */
+.processing {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+}
+
+.processing::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    top: 50%;
+    left: 50%;
+    margin-top: -10px;
+    margin-left: -10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==================== NOTIFICATIONS ==================== */
+.notification {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    animation: slideDown 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: inherit;
+    margin-bottom: 8px;
+}
+
+.notification.success {
+    background-color: var(--success-bg);
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+}
+
+.notification.error {
+    background-color: var(--error-bg);
+    border: 1px solid var(--accent-red);
+    color: var(--accent-red);
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ==================== SCROLLBAR ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 280px) {
+    .modal-content {
+        padding: 0;
+    }
+    .modal-header,
+    .modal-body {
+        padding: 12px;
+    }
+    .modal-actions {
+        padding: 10px 12px;
+    }
+    .modal-actions button {
+        flex: 1;
+        min-width: 0;
+    }
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .checkbox-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+    .folder-input-group {
+        flex-direction: column;
+    }
+    .folder-input-group button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 240px) {
+    .modal-actions {
+        flex-wrap: wrap;
+    }
+    .modal-actions button {
+        flex: 1;
+        min-width: 0;
+    }
+    .checkbox-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ==================== MODE TOGGLE (Layer Copy) ==================== */
+.mode-toggle {
+    display: flex;
+    gap: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.mode-toggle .mode-btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 12px;
+    border: none;
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.mode-toggle .mode-btn.active {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.mode-toggle .mode-btn:hover:not(.active) {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+/* ==================== COLLAPSIBLE HEADER ==================== */
+.collapsible {
+    cursor: pointer;
+    user-select: none;
+}
+
+.collapsible .dropdown-icon {
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+    color: var(--text-muted);
+}
+
+.collapsible.collapsed .dropdown-icon {
+    transform: rotate(-90deg);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Ornaments section collapsed state */
+.ornaments-section .designs-list {
+    transition: all 0.2s;
+}
+
+.ornaments-section.collapsed .designs-list {
+    display: none;
+}

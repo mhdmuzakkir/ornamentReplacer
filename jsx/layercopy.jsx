@@ -33,52 +33,6 @@ function lcFindLayer(doc, standardName) {
     return null;
 }
 
-function lcDetectPotentialQuranText(layer) {
-    // Target compound-path size from typical Quran text block: ~86.5 mm W x ~141.6 mm H
-    var TARGET_W_MM = 86.5;
-    var TARGET_H_MM = 141.6;
-    var TOLERANCE_MM = 12.0;
-    var MM_PER_PT = 0.352778;
-
-    try {
-        for (var i = 0; i < layer.pageItems.length; i++) {
-            var item = layer.pageItems[i];
-            if (item.typename === "CompoundPathItem" || item.typename === "PathItem") {
-                var bounds = item.geometricBounds;
-                if (!bounds || bounds.length < 4) continue;
-                var wPt = bounds[2] - bounds[0];
-                var hPt = bounds[1] - bounds[3];
-                var wMm = wPt * MM_PER_PT;
-                var hMm = hPt * MM_PER_PT;
-                if (wMm > 0 && hMm > 0 && wMm < hMm &&
-                    Math.abs(wMm - TARGET_W_MM) <= TOLERANCE_MM &&
-                    Math.abs(hMm - TARGET_H_MM) <= TOLERANCE_MM) {
-                    return true;
-                }
-            }
-            if (item.typename === "GroupItem") {
-                for (var j = 0; j < item.pageItems.length; j++) {
-                    var child = item.pageItems[j];
-                    if (child.typename === "CompoundPathItem" || child.typename === "PathItem") {
-                        var cb = child.geometricBounds;
-                        if (!cb || cb.length < 4) continue;
-                        var cwPt = cb[2] - cb[0];
-                        var chPt = cb[1] - cb[3];
-                        var cwMm = cwPt * MM_PER_PT;
-                        var chMm = chPt * MM_PER_PT;
-                        if (cwMm > 0 && chMm > 0 && cwMm < chMm &&
-                            Math.abs(cwMm - TARGET_W_MM) <= TOLERANCE_MM &&
-                            Math.abs(chMm - TARGET_H_MM) <= TOLERANCE_MM) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-    } catch (e) {}
-    return false;
-}
-
 function lcUnifyNames(doc) {
     var result = { success: true, renamed: [], skipped: [], errors: [] };
     try {
@@ -243,11 +197,7 @@ function scanCurrentLayers() {
         for (var i = 0; i < doc.layers.length; i++) {
             var layer = doc.layers[i];
             var matched = lcMatchName(layer.name);
-            var potential = null;
-            if (!matched && lcDetectPotentialQuranText(layer)) {
-                potential = "Quran Text";
-            }
-            result.layers.push({ name: layer.name, matched: matched || null, standard: matched || "\u2014", potential: potential });
+            result.layers.push({ name: layer.name, matched: matched || null, standard: matched || "\u2014" });
         }
         result.success = true;
     } catch (e) { result.error = e.toString(); }
@@ -269,23 +219,6 @@ function runUnifyLayerNames() {
     return JSON.stringify(result);
 }
 
-function renameLayerByName(layerName, newName) {
-    var result = { success: false, error: "" };
-    try {
-        if (app.documents.length === 0) { result.error = "No document open"; return JSON.stringify(result); }
-        var doc = app.activeDocument;
-        for (var i = 0; i < doc.layers.length; i++) {
-            if (doc.layers[i].name === layerName) {
-                doc.layers[i].name = newName;
-                result.success = true;
-                return JSON.stringify(result);
-            }
-        }
-        result.error = "Layer '" + layerName + "' not found";
-    } catch (e) { result.error = e.toString(); }
-    return JSON.stringify(result);
-}
-
 function scanSourceLayers(sourcePath) {
     var result = { success: false, layers: [], error: "" };
     try {
@@ -298,11 +231,7 @@ function scanSourceLayers(sourcePath) {
         for (var i = 0; i < sourceDoc.layers.length; i++) {
             var layer = sourceDoc.layers[i];
             var matched = lcMatchName(layer.name);
-            var potential = null;
-            if (!matched && lcDetectPotentialQuranText(layer)) {
-                potential = "Quran Text";
-            }
-            result.layers.push({ name: layer.name, matched: matched || null, standard: matched || "\u2014", potential: potential });
+            result.layers.push({ name: layer.name, matched: matched || null, standard: matched || "\u2014" });
         }
         if (!wasAlreadyOpen) { try { sourceDoc.close(SaveOptions.DONOTSAVECHANGES); } catch (e) {} }
         result.success = true;
@@ -523,11 +452,7 @@ function scanRiwayahFolderForLayers(riwayahFolderPath) {
         for (var i = 0; i < sourceDoc.layers.length; i++) {
             var layer = sourceDoc.layers[i];
             var matched = lcMatchName(layer.name);
-            var potential = null;
-            if (!matched && lcDetectPotentialQuranText(layer)) {
-                potential = "Quran Text";
-            }
-            result.layers.push({ name: layer.name, matched: matched || null, standard: matched || "\u2014", potential: potential });
+            result.layers.push({ name: layer.name, matched: matched || null, standard: matched || "\u2014" });
         }
         if (!wasAlreadyOpen) { try { sourceDoc.close(SaveOptions.DONOTSAVECHANGES); } catch (e) {} }
         result.success = true;

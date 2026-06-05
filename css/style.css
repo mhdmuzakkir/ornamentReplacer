@@ -156,7 +156,6 @@ body {
 }
 
 /* ==================== BUTTONS ==================== */
-.btn,
 .btn-primary,
 .btn-secondary,
 .btn-success,
@@ -188,14 +187,13 @@ body {
 }
 
 .btn-secondary {
-    background: var(--bg-tertiary);
+    background-color: var(--bg-tertiary);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-    background: var(--bg-hover);
-    border-color: var(--border-light);
+    background-color: var(--bg-hover);
     transform: translateY(-1px);
 }
 

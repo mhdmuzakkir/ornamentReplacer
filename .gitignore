@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Build outputs
+*.zip
+*.zxp
+
+# IDE
+.vscode/
+.idea/

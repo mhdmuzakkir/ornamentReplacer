@@ -1,0 +1,47 @@
+/* ==========================================================================
+   Mushaf Ecosystem - Unified Dark Theme
+   Shared CSS custom properties used by all CEP extensions.
+   
+   Usage: Import at the top of each extension's main CSS file:
+     @import url('mushaf-theme.css');
+   
+   Or copy this file into each extension's css/ folder and link it.
+   ========================================================================== */
+
+:root {
+    /* Backgrounds */
+    --bg-primary:   #2b2b2b;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary:  #3a3a3a;
+    --bg-hover:     #404040;
+    --bg-active:    #4a4a4a;
+    --card-bg:      #252525;
+
+    /* Text */
+    --text-primary:   #cccccc;
+    --text-secondary: #999999;
+    --text-muted:     #666666;
+    --text-inverse:   #2b2b2b;
+
+    /* Accents */
+    --accent-blue:   #4a9eff;
+    --accent-green:  #2ecc71;
+    --accent-orange: #f39c12;
+    --accent-red:    #e74c3c;
+    --accent-purple: #EC407A;
+
+    /* Borders */
+    --border-color: #444444;
+    --border-light: #555555;
+
+    /* Feedback backgrounds */
+    --success-bg: rgba(46, 204, 113, 0.15);
+    --warning-bg: rgba(243, 156, 18, 0.15);
+    --error-bg:   rgba(231, 76, 60, 0.15);
+
+    /* Elevation & shape */
+    --shadow:      0 2px 8px rgba(0, 0, 0, 0.4);
+    --radius:      4px;
+    --radius-lg:   12px;
+    --radius-pill: 24px;
+}

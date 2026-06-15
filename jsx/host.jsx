@@ -254,6 +254,32 @@ function getNewFilePath(originalFile, options) {
 }
 
 // ========== SWATCH FUNCTIONS ==========
+function deleteDocumentSwatches(doc) {
+    var protectedNames = ['[none]', '[registration]', '[paper]', '[black]', 'white', 'none'];
+    var removed = 0;
+    if (!doc) return removed;
+    try {
+        for (var i = doc.swatches.length - 1; i >= 0; i--) {
+            var swatch = doc.swatches[i];
+            var name = swatch.name.toString().toLowerCase();
+            var isProtected = false;
+            for (var p = 0; p < protectedNames.length; p++) {
+                if (name === protectedNames[p]) {
+                    isProtected = true;
+                    break;
+                }
+            }
+            if (!isProtected) {
+                try {
+                    swatch.remove();
+                    removed++;
+                } catch (e) {}
+            }
+        }
+    } catch (e) {}
+    return removed;
+}
+
 function scanTemplateSwatches(templatePath) {
     var result = {
         success: true,
@@ -1301,6 +1327,10 @@ function processSingleFile(options) {
         
         var doc = app.activeDocument;
         
+        if (options.deleteOldSwatches) {
+            deleteDocumentSwatches(doc);
+        }
+        
         if ((options.saveMode === "newFile" || options.saveMode === "sameAsTemplate") && !doc.fullName) {
             result.message = "Document not saved";
             return result;
@@ -1502,6 +1532,10 @@ function processBatch(options) {
                 
                 if (options.fitArtboard) {
                     try { app.executeMenuCommand("fitin"); } catch (e) {}
+                }
+                
+                if (options.deleteOldSwatches && options.replacementMode !== 'swatches') {
+                    deleteDocumentSwatches(doc);
                 }
                 
                 // HANDLE SWATCH REPLACEMENT MODE
@@ -1730,6 +1764,10 @@ function processBatchChunk(options) {
 
             if (options.fitArtboard) {
                 try { app.executeMenuCommand("fitin"); } catch (e) {}
+            }
+
+            if (options.deleteOldSwatches && options.replacementMode !== 'swatches') {
+                deleteDocumentSwatches(doc);
             }
 
             // Swatch mode
